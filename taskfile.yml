@@ -1,0 +1,37 @@
+version: '3'
+
+tasks:
+  rector:dry-run:
+    cmds:
+      - vendor/bin/rector --dry-run
+
+  rector:
+    cmds:
+      - vendor/bin/rector
+
+  phpstan:
+    cmds:
+      - ./vendor/bin/phpstan analyse -c phpstan.neon --memory-limit 1G
+
+  phpstan:baseline:
+    cmds:
+      - ./vendor/bin/phpstan analyse -c phpstan.neon --memory-limit 1G --generate-baseline
+
+  pint:dry-run:
+    cmds:
+      - vendor/bin/pint --parallel --config pint.json -v --test
+
+  pint:
+    cmds:
+      - vendor/bin/pint --parallel --config pint.json
+
+  test:
+    cmds:
+      - php artisan test --parallel
+
+  check:
+    cmds:
+      - task: rector
+      - task: phpstan
+      - task: pint
+      - task: test
